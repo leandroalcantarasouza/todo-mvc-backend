@@ -10,8 +10,12 @@ class TodoService(private val todoRepository: ITodoRepository) {
         return todoRepository.save(todo)
     }
 
-    fun getById(id: String): Todo? {
+    fun getById(id: Long): Todo? {
         return todoRepository.findByIdOrNull(id)
+    }
+
+    fun deleteById(id: Long) {
+        return todoRepository.deleteById(id)
     }
 
 }
