@@ -1,5 +1,8 @@
 package com.leandro.todo.todobackend.todo
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 import java.lang.IllegalArgumentException
 
@@ -22,5 +25,9 @@ class TodoFacade (private val todoService: TodoService) {
         val todoOriginal = this.getById(id) ?: throw IllegalArgumentException("Element not found")
         val todoModificado = Todo(id= todoOriginal.id, conteudo = todo.conteudo)
         return todoService.insert(todoModificado)
+    }
+
+    fun findByConteudo(conteudoFilter: String, pageable: Pageable): Page<Todo> {
+        return todoService.findByConteudo(conteudoFilter, pageable)
     }
 }
