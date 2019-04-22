@@ -1,0 +1,16 @@
+version: '3.7'
+services:
+  backend:
+    image: todomvc-backend:0.0.1-SNAPSHOT
+    container_name: todomvc-backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - /var/lib/logback/logback-logstash.xml:/etc/configuration/logback.xml #configuracao minikube
+      #- /home/leandro/projetos/apresentacao-backend/src/kubernetes/logback-logstash.xml:/etc/configuration/logback.xml  #configuracao docker local
+    networks:
+      - default
+    environment:
+      - LOGGING_CONFIG=file:/etc/configuration/logback.xml
+  mongo:
+    image: mongo:3.6

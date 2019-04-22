@@ -1,4 +1,4 @@
-package com.leandro.todo.todomvcbackend
+package com.leandro.todo.todobackend
 
 import org.junit.Test
 import org.junit.runner.RunWith
