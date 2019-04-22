@@ -9,8 +9,8 @@ FROM openjdk:8-jre
 MAINTAINER Leandro Souza <leandro.alcantara.souza@gmail.com>
 VOLUME /tmp
 WORKDIR /usr/src/app
-COPY --from=maven /usr/src/app/target/ola.jar app.jar
+COPY --from=maven /usr/src/app/target/todo-backend.jar todo-backend.jar
 ENV JAVA_OPTIONS=""
 ENV LOGGING_CONFIG=""
 EXPOSE 8080
-ENTRYPOINT java $JAVA_OPTIONS -Djava.security.egd=file:/dev/./urandom -jar app.jar
+ENTRYPOINT java $JAVA_OPTIONS -Djava.security.egd=file:/dev/./urandom -jar todo-backend.jar

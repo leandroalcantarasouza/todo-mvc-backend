@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDateTime
 
 @Document("todo")
-data class Todo(@Id val id: Long,
-                val dataUltimaAtualizacao: LocalDateTime = LocalDateTime.now(),
-                val conteudo: String)
+data class Todo(@Id val id: String? = null,
+                val lastUpdateDate: LocalDateTime = LocalDateTime.now(),
+                val content: String)
 
