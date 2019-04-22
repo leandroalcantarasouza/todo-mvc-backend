@@ -22,7 +22,6 @@
         <!-- maven-compiler-plugin -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-
     </properties>
 
 	<dependencies>
@@ -88,5 +87,23 @@
 			</plugin>
 		</plugins>
 	</build>
+
+    <profiles>
+        <profile>
+            <id>localhost</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.profiles.active>localhost</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>cloud</id>
+            <properties>
+                <spring.profiles.active>cloud</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

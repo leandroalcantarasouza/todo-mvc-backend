@@ -3,8 +3,25 @@ server:
     context-path: /todo-backend/api
 
 spring:
+  profiles:
+    active: @spring.profiles.active@
+
+---
+
+spring:
+  profiles: localhost
   data:
     mongodb:
       host: localhost
       port: 27017
+      database: todo-backend
+
+---
+
+spring:
+  profiles: cloud
+  data:
+    mongodb:
+      host: ${MONGO_URI}
+      port: ${MONGO_PORT}
       database: todo-backend

@@ -3,7 +3,7 @@ WORKDIR usr/src/app
 COPY pom.xml .
 RUN mvn dependency:go-offline
 COPY src src
-RUN mvn package
+RUN mvn clean package -Pcloud
 
 FROM openjdk:8-jre
 MAINTAINER Leandro Souza <leandro.alcantara.souza@gmail.com>
