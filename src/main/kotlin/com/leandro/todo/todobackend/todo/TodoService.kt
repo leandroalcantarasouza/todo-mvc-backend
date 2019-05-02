@@ -17,11 +17,17 @@ class TodoService(private val todoRepository: ITodoRepository) {
     }
 
     fun deleteById(id: String) {
-        return todoRepository.deleteById(id)
+        todoRepository.deleteById(id)
     }
 
-    fun findByContent(contentFilter: String, pageable: Pageable): Page<Todo> {
-        return todoRepository.findByContentContainingOrderByLastUpdateDateDesc(contentFilter, pageable)
+    fun findByContent(contentFilter: String?, pageable: Pageable): Page<Todo> {
+        var filter: String = if(contentFilter.isNullOrEmpty()) {
+            "blah"
+        }
+        else {
+            contentFilter.toString()
+        }
+        return todoRepository.findByContentContainingOrderByLastUpdateDateDesc(filter, pageable)
     }
 
 }

@@ -19,7 +19,7 @@ class TodoFacade (private val todoService: TodoService,
     }
 
     fun deleteById(id: String) {
-        return todoService.deleteById(id)
+        todoService.deleteById(id)
     }
 
     fun update(id: String, todo: Todo): Todo {
@@ -28,7 +28,7 @@ class TodoFacade (private val todoService: TodoService,
         return todoService.insert(modifiedTodo)
     }
 
-    fun findByContent(contentFilter: String, pageable: Pageable): Page<Todo> {
+    fun findByContent(contentFilter: String?, pageable: Pageable): Page<Todo> {
         return todoService.findByContent(contentFilter, pageable)
     }
 }

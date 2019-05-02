@@ -16,7 +16,7 @@ class TodoMvcBackendApplication {
 
 
     @Bean
-    fun corsFilter(): FilterRegistrationBean<CorsFilter?> {
+    fun corsFilter(): FilterRegistrationBean<CorsFilter> {
         val source = UrlBasedCorsConfigurationSource()
         val corsConfiguration = CorsConfiguration()
         corsConfiguration.allowedOrigins = listOf("*")

@@ -35,7 +35,7 @@ class TodoController(private val todoFacade: TodoFacade) {
     }
 
     @GetMapping("/todos")
-    fun findByContent(contentFilter: String, pageable: Pageable): ResponseEntity<Page<Todo>> {
+    fun findByContent(contentFilter: String?, pageable: Pageable): ResponseEntity<Page<Todo>> {
         val retorno = todoFacade.findByContent(contentFilter, pageable)
         return ResponseEntity(retorno, OK)
     }
