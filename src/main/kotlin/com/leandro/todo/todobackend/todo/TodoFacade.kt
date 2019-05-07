@@ -1,6 +1,7 @@
 package com.leandro.todo.todobackend.todo
 
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.lang.IllegalArgumentException
@@ -28,7 +29,11 @@ class TodoFacade (private val todoService: TodoService,
         return todoService.insert(modifiedTodo)
     }
 
-    fun findByContent(contentFilter: String?, pageable: Pageable): Page<Todo> {
+    fun findByContent(contentFilter: String?, pageSize: Int): Page<Todo> {
+        if(pageSize < 0) {
+            throw IllegalArgumentException("Page size must not be below zero")
+        }
+        val pageable = PageRequest.of(pageSize, 10)
         return todoService.findByContent(contentFilter, pageable)
     }
 }

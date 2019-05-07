@@ -2,11 +2,16 @@ package com.leandro.todo.todobackend.todo
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Sort
+
 
 @Service
-class TodoService(private val todoRepository: ITodoRepository) {
+class TodoService(private val todoRepository: ITodoRepository, private val searchTodoImpl: SearchTodoImpl) {
 
     fun insert(todo: Todo): Todo {
         return todoRepository.save(todo)
@@ -21,13 +26,15 @@ class TodoService(private val todoRepository: ITodoRepository) {
     }
 
     fun findByContent(contentFilter: String?, pageable: Pageable): Page<Todo> {
-        var filter: String = if(contentFilter.isNullOrEmpty()) {
-            "blah"
+        var query = Query()
+        query.with(pageable)
+        query.with(Sort.by(Sort.Direction.DESC,"lastUpdateDate"))
+        if(!contentFilter.isNullOrEmpty()) {
+            query.addCriteria(Criteria.where("content").regex(contentFilter.toString(),"i"))
         }
-        else {
-            contentFilter.toString()
-        }
-        return todoRepository.findByContentContainingOrderByLastUpdateDateDesc(filter, pageable)
+        var countQueryresult = searchTodoImpl.findAllTodoCountBy(query)
+        var returnedElements = searchTodoImpl.findAllTodoBy(query)
+        return PageImpl<Todo>(returnedElements, pageable, countQueryresult)
     }
 
 }
