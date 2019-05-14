@@ -1,13 +1,15 @@
 package com.leandro.todo.todobackend.todo
 
+import com.leandro.todo.todobackend.todo.exception.BusinessException
+import com.leandro.todo.todobackend.todo.exception.EmptyTodoContentException
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import org.springframework.data.domain.PageImpl
-import org.springframework.data.domain.Sort
 
 
 @Service
@@ -37,4 +39,25 @@ class TodoService(private val todoRepository: ITodoRepository, private val searc
         return PageImpl<Todo>(returnedElements, pageable, countQueryresult)
     }
 
+    fun validateTodoInsert(todo: Todo) : Todo {
+        if(todo.content.isBlank()) {
+            throw EmptyTodoContentException()
+        }
+
+        if(!todo.id.isNullOrBlank()) {
+            throw BusinessException("todo.insert.exist.id.exception")
+        }
+        return todo
+    }
+
+    fun validateTodoUpdate(todo: Todo) : Todo {
+        if(todo.content.isBlank()) {
+            throw EmptyTodoContentException()
+        }
+
+        if(todo.id.isNullOrBlank()) {
+            throw BusinessException("todo.update.without.id.exception")
+        }
+        return todo
+    }
 }

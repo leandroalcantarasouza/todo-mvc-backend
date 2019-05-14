@@ -24,7 +24,7 @@ class TodoController(private val todoFacade: TodoFacade) {
     }
 
     @PatchMapping("/todos/{id}")
-    fun update(@PathVariable id: String, @RequestBody todo: Todo): ResponseEntity<Todo> {
+    fun update(@PathVariable id: String, @RequestBody todo: TodoDto): ResponseEntity<Todo> {
         val returnedResults = todoFacade.update(id, todo)
         return ResponseEntity(returnedResults, OK)
     }

@@ -1,10 +1,9 @@
 package com.leandro.todo.todobackend.todo
 
+import com.leandro.todo.todobackend.todo.exception.TodoNotFoundException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.lang.IllegalArgumentException
 
 @Service
 class TodoFacade (private val todoService: TodoService,
@@ -12,20 +11,21 @@ class TodoFacade (private val todoService: TodoService,
 
     fun insert(todo: TodoDto): Todo {
         val todoToBeInserted = todoFactory.fromTodoDTO(todo)
-        return todoService.insert(todoToBeInserted)
+        return todoService.insert(todoService.validateTodoInsert(todoToBeInserted))
     }
 
     fun getById(id: String): Todo? {
-        return todoService.getById(id)
+        return todoService.getById(id) ?: throw TodoNotFoundException()
     }
 
     fun deleteById(id: String) {
         todoService.deleteById(id)
     }
 
-    fun update(id: String, todo: Todo): Todo {
-        val originalTodo = this.getById(id) ?: throw IllegalArgumentException("Element not found")
-        val modifiedTodo = Todo(id= originalTodo.id, content = todo.content)
+    fun update(id: String, todo: TodoDto): Todo {
+        val originalTodo = this.getById(id) ?: throw TodoNotFoundException()
+
+        val modifiedTodo = todoService.validateTodoUpdate(todoFactory.fromTodoDTO(todo, originalTodo))
         return todoService.insert(modifiedTodo)
     }
 

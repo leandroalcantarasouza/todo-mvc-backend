@@ -9,6 +9,9 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import org.springframework.web.filter.CorsFilter
+import javax.validation.Validation
+import javax.validation.Validator
+import javax.validation.ValidatorFactory
 
 @SpringBootApplication
 @EnableMongoRepositories
@@ -25,6 +28,12 @@ class TodoMvcBackendApplication {
         val filterRegistrationBean = FilterRegistrationBean(CorsFilter(source))
         filterRegistrationBean.order = OrderedFilter.REQUEST_WRAPPER_FILTER_MAX_ORDER
         return filterRegistrationBean
+    }
+
+    @Bean
+    fun validator() : Validator? {
+       val factory = Validation.buildDefaultValidatorFactory()
+       return factory.validator
     }
 
 }
