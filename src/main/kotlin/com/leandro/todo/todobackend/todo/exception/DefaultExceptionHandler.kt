@@ -1,16 +1,13 @@
 package com.leandro.todo.todobackend.todo.exception
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.springframework.context.MessageSource
 import org.springframework.http.HttpStatus
-import org.springframework.validation.BindException
 import org.springframework.validation.Errors
 import org.springframework.validation.FieldError
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
-import java.io.IOException
 import java.time.Instant
 import java.util.*
 import javax.validation.ConstraintViolation
@@ -41,25 +38,12 @@ class DefaultExceptionHandler(val messageSource: MessageSource) {
         return map
     }
 
-    @ExceptionHandler(BindException::class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    @Throws(IOException::class)
-    fun handleValidationException(ex: BindException): Map<String, Any> {
-        val map = HashMap<String, Any>()
-
-        map[ERROR] = resolveMessage(VALIDATION_FAILURE)
-        map[VIOLATIONS] = convertError(ex.bindingResult)
-        return map
-    }
-
     @ExceptionHandler(Exception::class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     fun handleUncaughtException(ex: Exception): Map<String, Any> {
         val map = HashMap<String, Any>()
-        val resolveMessage = resolveMessage(UNKNOWN_ERROR)
-        map.put(ERROR, resolveMessage)
+        map[ERROR] = resolveMessage(UNKNOWN_ERROR)
         val timeInMillis = Instant.now().toEpochMilli()
         map[TICKET] = timeInMillis
         return map
@@ -77,11 +61,11 @@ class DefaultExceptionHandler(val messageSource: MessageSource) {
     }
 
     private fun resolveMessage(code: String, vararg args: Any): String {
-        return messageSource.getMessage(code, args, Locale.getDefault())
+        return messageSource.getMessage(code, args, Locale.ENGLISH)
     }
 
     private fun resolveMessage(fieldError: FieldError): String {
-        return messageSource.getMessage(fieldError, Locale.getDefault())
+        return messageSource.getMessage(fieldError, Locale.ENGLISH)
     }
 
     private fun convertError(errors: Errors): List<RestFieldMessageDTO> {
@@ -103,27 +87,6 @@ class DefaultExceptionHandler(val messageSource: MessageSource) {
                 constraintViolation.invalidValue))
         }
         return result
-    }
-
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    class RestFieldMessageDTO {
-
-        private var field: String? = null
-
-        private var message: String? = null
-
-        private var rejectedValue: Any? = null
-
-        constructor(message: String) {
-            this.message = message
-        }
-
-        constructor(field: String, message: String, rejectedValue: Any?) {
-            this.field = field
-            this.message = message
-            this.rejectedValue = rejectedValue
-        }
     }
 }
 

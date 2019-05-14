@@ -11,12 +11,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import org.springframework.web.filter.CorsFilter
 import javax.validation.Validation
 import javax.validation.Validator
-import javax.validation.ValidatorFactory
 
 @SpringBootApplication
 @EnableMongoRepositories
 class TodoMvcBackendApplication {
-
 
     @Bean
     fun corsFilter(): FilterRegistrationBean<CorsFilter> {
