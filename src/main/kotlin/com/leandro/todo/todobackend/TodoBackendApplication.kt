@@ -30,7 +30,7 @@ class TodoMvcBackendApplication {
         val source = UrlBasedCorsConfigurationSource()
         val corsConfiguration = CorsConfiguration()
         corsConfiguration.allowedOrigins = listOf("*")
-        corsConfiguration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT")
+        corsConfiguration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD", "TRACE", "CONNECT")
         source.registerCorsConfiguration("/**", corsConfiguration)
         val filterRegistrationBean = FilterRegistrationBean(CorsFilter(source))
         filterRegistrationBean.order = OrderedFilter.REQUEST_WRAPPER_FILTER_MAX_ORDER
